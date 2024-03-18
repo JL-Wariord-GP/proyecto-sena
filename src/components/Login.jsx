@@ -1,75 +1,147 @@
-import "../utils/login.css";
-import { useDispatch, useSelector } from "react-redux";
-import { setSignUpMode } from "../store/slices/container.slice";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import "../utils/login.css";
+import Log from "../assets/log.svg";
+import Register from "../assets/register.svg";
 
 const Login = () => {
-  const { register, handleSubmit, reset } = useForm();
-  const dispatch = useDispatch();
-  const isSignUpMode = useSelector((state) => state.container.signUpMode);
+  const [isSignUpMode, setIsSignUpMode] = useState(false);
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (
-      storedUser &&
-      storedUser.email === data.email &&
-      storedUser.password === data.password
-    ) {
-      alert("¡Inicio de sesión exitoso!");
+  const {
+    register: signInRegister,
+    handleSubmit: handleSignInSubmit,
+    reset: resetSignIn,
+    formState: { errors: signInErrors },
+    watch: signInWatch,
+  } = useForm();
+
+  const {
+    register: signUpRegister,
+    handleSubmit: handleSignUpSubmit,
+    reset: resetSignUp,
+    formState: { errors: signUpErrors },
+    watch: signUpWatch,
+  } = useForm();
+
+  const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+  const signInUsername = signInWatch("signInUsername");
+  const signInPassword = signInWatch("signInPassword");
+
+  const signUpUsername = signUpWatch("signUpUsername");
+  const signUpPassword = signUpWatch("signUpPassword");
+
+  const onSubmitSignIn = () => {
+    if (!signInUsername || !signInPassword) {
+      alert("Por favor, complete todos los campos");
+      return;
+    }
+
+    const foundUser = storedUsers.find(
+      (user) =>
+        user.username === signInUsername && user.password === signInPassword
+    );
+
+    if (foundUser) {
       navigate("/main");
     } else {
       alert("Credenciales incorrectas o usuario no registrado");
-      reset();
     }
+    resetSignIn();
+  };
+
+  const onSubmitSignUp = () => {
+    if (!signUpUsername || !signUpPassword) {
+      alert("Por favor, complete todos los campos");
+      return;
+    }
+
+    const newUser = { username: signUpUsername, password: signUpPassword };
+    const updatedUsers = [...storedUsers, newUser];
+    localStorage.setItem("users", JSON.stringify(updatedUsers));
+    alert("Registro exitoso");
+    resetSignUp();
   };
 
   const handleSignUpMode = () => {
-    dispatch(setSignUpMode(true));
-    navigate("/register");
+    setIsSignUpMode(true);
   };
 
-  const containerClass = isSignUpMode ? "sign-up-mode" : ""; // Aplicar la clase 'sign-up-mode' si isSignUpMode es true
+  const handleSignInMode = () => {
+    setIsSignUpMode(false);
+  };
 
   return (
-    <div className={`container ${containerClass}`}>
+    <div className={`container ${isSignUpMode ? "sign-up-mode" : ""}`}>
       <div className="forms-container">
         <div className="signin-signup">
-          <form onSubmit={handleSubmit(onSubmit)} className="sign-in-form">
-            <h2 className="title">Iniciar sesión</h2>
+          <form
+            onSubmit={
+              isSignUpMode
+                ? handleSignInSubmit(onSubmitSignUp)
+                : handleSignInSubmit(onSubmitSignIn)
+            }
+            className="sign-in-form"
+          >
+            <h2 className="title">Iniciar Sesión</h2>
             <div className="input-field">
-              <i className="fas fa-user"></i>
+              <i className="fas fa-user" />
               <input
                 type="text"
-                placeholder="Correo electrónico"
-                {...register("email")}
+                placeholder="Usuario"
+                {...signInRegister("signInUsername", { required: true })}
               />
+              {signInErrors.signInUsername && (
+                <span className="error-message">Usuario requerido</span>
+              )}
             </div>
             <div className="input-field">
-              <i className="fas fa-lock"></i>
+              <i className="fas fa-lock" />
               <input
                 type="password"
                 placeholder="Contraseña"
-                {...register("password")}
+                {...signInRegister("signInPassword", { required: true })}
               />
+              {signInErrors.signInPassword && (
+                <span className="error-message">Contraseña requerida</span>
+              )}
             </div>
-            <input type="submit" value="Iniciar sesión" className="btn solid" />
-            <p className="social-text">O inicia sesión con</p>
-            <div className="social-media">
-              <a href="#" className="social-icon">
-                <i className="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" className="social-icon">
-                <i className="fab fa-twitter"></i>
-              </a>
-              <a href="#" className="social-icon">
-                <i className="fab fa-google"></i>
-              </a>
-              <a href="#" className="social-icon">
-                <i className="fab fa-linkedin-in"></i>
-              </a>
+            <input type="submit" className="btn solid" value="Iniciar Sesión" />
+          </form>
+          <form
+            onSubmit={
+              isSignUpMode
+                ? handleSignUpSubmit(onSubmitSignUp)
+                : handleSignUpSubmit(onSubmitSignIn)
+            }
+            className="sign-up-form"
+          >
+            <h2 className="title">Registrarse</h2>
+            <div className="input-field">
+              <i className="fas fa-user" />
+              <input
+                type="text"
+                placeholder="Usuario"
+                {...signUpRegister("signUpUsername", { required: true })}
+              />
+              {signUpErrors.signUpUsername && (
+                <span className="error-message">Usuario requerido</span>
+              )}
             </div>
+            <div className="input-field">
+              <i className="fas fa-lock" />
+              <input
+                type="password"
+                placeholder="Contraseña"
+                {...signUpRegister("signUpPassword", { required: true })}
+              />
+              {signUpErrors.signUpPassword && (
+                <span className="error-message">Contraseña requerida</span>
+              )}
+            </div>
+            <input type="submit" className="btn" value="Registrarse" />
           </form>
         </div>
       </div>
@@ -85,7 +157,20 @@ const Login = () => {
               Registrarse
             </button>
           </div>
-          <img src="img/log.svg" className="image" alt="" />
+          <img src={Log} className="image" alt="" />
+        </div>
+        <div className="panel right-panel">
+          <div className="content">
+            <h3>¿Ya tiene una cuenta?</h3>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+              laboriosam ad deleniti.
+            </p>
+            <button className="btn transparent" onClick={handleSignInMode}>
+              Iniciar Sesión
+            </button>
+          </div>
+          <img src={Register} className="image" alt="" />
         </div>
       </div>
     </div>
