@@ -1,22 +1,24 @@
 // App.js
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.css"; // Asegúrate de tener los estilos aquí
-
-import Login from "./components/Login";
+import "./App.module.css";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Login from "./page/Login";
 import Container from "./components/Container";
-import ProtectedRoute from "./components/routes/ProtectedRoute";
-import { useLocalStorage } from "react-use";
 
 function App() {
-  const [user] = useLocalStorage("user", ""); // Corregir aquí
+  // Simular autenticación 
+  const isAuthenticated = true;
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route element={<ProtectedRoute canActive={user} redirectPath="/" />}>
-          <Route path="/main" element={<Container />} />
-        </Route>
+        {/* Utiliza una función para verificar la autenticación */}
+        <Route
+          path="/main"
+          element={
+            isAuthenticated ? <Container /> : <Navigate to="/" replace />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

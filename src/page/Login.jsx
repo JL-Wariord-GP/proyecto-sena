@@ -1,7 +1,7 @@
+import styles from "../css/login.module.css";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import "../utils/login.css";
 import Log from "../assets/log.svg";
 import Register from "../assets/register.svg";
 
@@ -25,7 +25,11 @@ const Login = () => {
     watch: signUpWatch,
   } = useForm();
 
-  const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+  // Comentar la línea siguiente para usar credenciales predefinidas
+  // const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+  // Definir credenciales predefinidas
+  const predefinedUser = { username: "admin", password: "123456" };
 
   const signInUsername = signInWatch("signInUsername");
   const signInPassword = signInWatch("signInPassword");
@@ -39,16 +43,17 @@ const Login = () => {
       return;
     }
 
-    const foundUser = storedUsers.find(
-      (user) =>
-        user.username === signInUsername && user.password === signInPassword
-    );
-
-    if (foundUser) {
+    // Usar credenciales predefinidas
+    if (
+      signInUsername === predefinedUser.username &&
+      signInPassword === predefinedUser.password
+    ) {
+      console.log("ingreso exitoso");
       navigate("/main");
     } else {
-      alert("Credenciales incorrectas o usuario no registrado");
+      alert("Credenciales incorrectas");
     }
+
     resetSignIn();
   };
 
@@ -58,9 +63,12 @@ const Login = () => {
       return;
     }
 
-    const newUser = { username: signUpUsername, password: signUpPassword };
-    const updatedUsers = [...storedUsers, newUser];
-    localStorage.setItem("users", JSON.stringify(updatedUsers));
+    // No es necesario almacenar usuarios cuando se usan credenciales predefinidas
+
+    // const newUser = { username: signUpUsername, password: signUpPassword };
+    // const updatedUsers = [...storedUsers, newUser];
+    // localStorage.setItem("users", JSON.stringify(updatedUsers));
+
     alert("Registro exitoso");
     resetSignUp();
   };
@@ -74,13 +82,17 @@ const Login = () => {
   };
 
   return (
-    <div className={`container ${isSignUpMode ? "sign-up-mode" : ""}`}>
+    <div
+      className={`${styles.container} ${
+        isSignUpMode ? styles["sign-up-mode"] : ""
+      }`}
+    >
       <div className="forms-container">
         <div className="signin-signup">
           <form
             onSubmit={
               isSignUpMode
-                ? handleSignInSubmit(onSubmitSignUp)
+                ? handleSignUpSubmit(onSubmitSignUp)
                 : handleSignInSubmit(onSubmitSignIn)
             }
             className="sign-in-form"

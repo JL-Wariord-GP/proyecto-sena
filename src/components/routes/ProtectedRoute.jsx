@@ -1,18 +1,10 @@
-import { Navigate, Outlet } from "react-router-dom"
+// ProtectedRoute.js
+import { Route, Navigate } from "react-router-dom";
 
+const ProtectedRoute = ({ ...rest }) => {
+  const isAuthenticated = true; // Aquí puedes implementar tu lógica de autenticación
 
-const ProtectedRoute = ({
-    // eslint-disable-next-line react/prop-types
-    canActive,
-    // eslint-disable-next-line react/prop-types
-    redirectPath = '/'
+  return isAuthenticated ? <Route {...rest} /> : <Navigate to="/" replace />;
+};
 
-}) => {
-    if (!canActive) {
-        return <Navigate to={redirectPath} replace/>
-    }
-
-    return <Outlet/>
-}
-
-export default ProtectedRoute
+export default ProtectedRoute;
