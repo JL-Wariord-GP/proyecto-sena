@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Log from "../assets/log.svg";
 import Register from "../assets/register.svg";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 const Login = () => {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
@@ -121,6 +122,21 @@ const Login = () => {
               )}
             </div>
             <input type="submit" className="btn solid" value="Iniciar Sesión" />
+            <p className="social-text">Or Sign in with social platforms</p>
+            <div className="social-media">
+              <a href="#" className="social-icon">
+                <i className="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" className="social-icon">
+                <i className="fab fa-twitter"></i>
+              </a>
+              <a href="#" className="social-icon">
+                <i className="fab fa-google"></i>
+              </a>
+              <a href="#" className="social-icon">
+                <i className="fab fa-linkedin-in"></i>
+              </a>
+            </div>
           </form>
           <form
             onSubmit={
@@ -143,6 +159,10 @@ const Login = () => {
               )}
             </div>
             <div className="input-field">
+              <i className="fas fa-envelope"></i>
+              <input type="email" placeholder="Email" />
+            </div>
+            <div className="input-field">
               <i className="fas fa-lock" />
               <input
                 type="password"
@@ -154,6 +174,21 @@ const Login = () => {
               )}
             </div>
             <input type="submit" className="btn" value="Registrarse" />
+            <p className="social-text">Or Sign up with social platforms</p>
+            <div className="social-media">
+              <a href="#" className="social-icon">
+                <i className="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" className="social-icon">
+                <i className="fab fa-twitter"></i>
+              </a>
+              <a href="#" className="social-icon">
+                <i className="fab fa-google"></i>
+              </a>
+              <a href="#" className="social-icon">
+                <i className="fab fa-linkedin-in"></i>
+              </a>
+            </div>
           </form>
         </div>
       </div>
