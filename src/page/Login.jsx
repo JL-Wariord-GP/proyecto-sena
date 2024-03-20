@@ -122,7 +122,7 @@ const Login = () => {
               )}
             </div>
             <input type="submit" className="btn solid" value="Iniciar Sesión" />
-            <p className="social-text">Or Sign in with social platforms</p>
+            <p className="social-text">Iniciar sesión con plataformas sociales</p>
             <div className="social-media">
               <a href="#" className="social-icon">
                 <i className="fab fa-facebook-f"></i>
@@ -174,7 +174,7 @@ const Login = () => {
               )}
             </div>
             <input type="submit" className="btn" value="Registrarse" />
-            <p className="social-text">Or Sign up with social platforms</p>
+            <p className="social-text">Regístrate con plataformas sociales</p>
             <div className="social-media">
               <a href="#" className="social-icon">
                 <i className="fab fa-facebook-f"></i>

@@ -49,6 +49,7 @@ form {
   overflow: hidden;
   grid-column: 1 / 2;
   grid-row: 1 / 2;
+  gap: 12px;
 }
 
 form.sign-up-form {
@@ -100,6 +101,17 @@ form.sign-in-form {
 .input-field input::placeholder {
   color: #aaa;
   font-weight: 500;
+}
+
+span.error-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 4rem;
+  margin: 3px;
+  font-size: 15px;
+  color: #ff0000;
 }
 
 .social-text {

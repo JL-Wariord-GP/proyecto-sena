@@ -1,4 +1,4 @@
-import principal from "../App.module.css";
+import principal from "../css/App.module.css";
 import Aside from "./Aside";
 import Main from "./Main";
 import Right from "./Right";
