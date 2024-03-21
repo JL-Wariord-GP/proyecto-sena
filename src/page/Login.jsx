@@ -1,14 +1,24 @@
-import styles from "../css/login.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import styles from "../css/login.module.css";
 import Log from "../assets/log.svg";
 import Register from "../assets/register.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [isMainLoading, setIsMainLoading] = useState(false);
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   const {
     register: signInRegister,
@@ -26,10 +36,6 @@ const Login = () => {
     watch: signUpWatch,
   } = useForm();
 
-  // Comentar la línea siguiente para usar credenciales predefinidas
-  // const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
-
-  // Definir credenciales predefinidas
   const predefinedUser = { username: "admin", password: "123456" };
 
   const signInUsername = signInWatch("signInUsername");
@@ -44,13 +50,16 @@ const Login = () => {
       return;
     }
 
-    // Usar credenciales predefinidas
     if (
       signInUsername === predefinedUser.username &&
       signInPassword === predefinedUser.password
     ) {
       console.log("ingreso exitoso");
-      navigate("/main");
+      setIsMainLoading(true);
+      setTimeout(() => {
+        setIsMainLoading(false);
+        navigate("/main");
+      }, 2000);
     } else {
       alert("Credenciales incorrectas");
     }
@@ -64,12 +73,6 @@ const Login = () => {
       return;
     }
 
-    // No es necesario almacenar usuarios cuando se usan credenciales predefinidas
-
-    // const newUser = { username: signUpUsername, password: signUpPassword };
-    // const updatedUsers = [...storedUsers, newUser];
-    // localStorage.setItem("users", JSON.stringify(updatedUsers));
-
     alert("Registro exitoso");
     resetSignUp();
   };
@@ -82,12 +85,25 @@ const Login = () => {
     setIsSignUpMode(false);
   };
 
+  if (isLoading) {
+    return (
+      <div className={styles.loading}>
+        <p>Cargando...</p>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`${styles.container} ${
         isSignUpMode ? styles["sign-up-mode"] : ""
       }`}
     >
+      {isMainLoading && (
+        <div className={styles.loading}>
+          <p>Cargando página principal...</p>
+        </div>
+      )}
       <div className="forms-container">
         <div className="signin-signup">
           <form
@@ -122,7 +138,9 @@ const Login = () => {
               )}
             </div>
             <input type="submit" className="btn solid" value="Iniciar Sesión" />
-            <p className="social-text">Iniciar sesión con plataformas sociales</p>
+            <p className="social-text">
+              Iniciar sesión con plataformas sociales
+            </p>
             <div className="social-media">
               <a href="#" className="social-icon">
                 <i className="fab fa-facebook-f"></i>

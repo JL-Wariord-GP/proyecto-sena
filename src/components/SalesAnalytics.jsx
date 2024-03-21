@@ -3,7 +3,7 @@
 function SalesAnalytics() {
   return (
     <div className="sales-analytics">
-      <h2>Sales Analytics</h2>
+      <h2>Mis Productos</h2>
       <div className="item online">
         <div className="icon">
           <span className="material-icons-sharp">shopping_cart</span>
@@ -11,11 +11,9 @@ function SalesAnalytics() {
 
         <div className="right">
           <div className="info">
-            <h3>ONLINE ORDERS</h3>
-            <small className="text-muted">Last 24 Horas</small>
+            <h3>Gestionar Trámites</h3>
           </div>
-          <h5 className="success">+39%</h5>
-          <h3>3849</h3>
+          <h3>Ver</h3>
         </div>
       </div>
 
@@ -26,11 +24,9 @@ function SalesAnalytics() {
 
         <div className="right">
           <div className="info">
-            <h3>OFFLINE ORDERS</h3>
-            <small className="text-muted">Last 24 Horas</small>
+            <h3>Reprogramación de Citas</h3>
           </div>
-          <h5 className="danger">-17%</h5>
-          <h3>1100</h3>
+          <h3>Ver</h3>
         </div>
       </div>
 
@@ -41,11 +37,9 @@ function SalesAnalytics() {
 
         <div className="right">
           <div className="info">
-            <h3>NEW CUSTOMERS</h3>
-            <small className="text-muted">Last 24 Horas</small>
+            <h3>Atención al Usuario</h3>
           </div>
-          <h5 className="success">+25%</h5>
-          <h3>849</h3>
+          <h3>ver</h3>
         </div>
       </div>
 

@@ -19,7 +19,7 @@ function Aside() {
           <div className="logo">
             <img src={Logo} alt="Logo" />
             <h2 className="text-muted">
-              Diagno<span className="danger">Cita</span>
+              Diagno<span className="text-muted-span">Cita</span>
             </h2>
             <div className="close" id="close-btn">
               <span className="material-icons-sharp">close</span>
@@ -28,17 +28,17 @@ function Aside() {
         </div>
 
         <div className="sidebar">
-          <a href="" className="active">
+          <a href="#" className="active">
             <span className="material-icons-sharp">grid_view</span>
             <h3>Menú Principal</h3>
           </a>
 
-          <a href="">
+          <a href="#">
             <span className="material-icons-sharp">person_outline</span>
             <h3>Mi Perfil</h3>
           </a>
 
-          <a href="">
+          <a href="#">
             <span className="material-symbols-outlined">
               notifications_active
             </span>
@@ -46,33 +46,33 @@ function Aside() {
             <span className="message-count">26</span>
           </a>
 
-          <a href="">
+          <a href="#">
             <span className="material-symbols-outlined">menu_book</span>
             <h3>Tutorial</h3>
           </a>
 
-          <a href="">
+          <a href="#">
             <span className="material-symbols-outlined">quiz</span>
             <h3>Preguntas Frecuentes</h3>
           </a>
 
-          <a href="">
+          <a href="#">
             <span className="material-symbols-outlined">help_center</span>
             <h3>Centro de Ayuda</h3>
           </a>
 
-          <a href="">
+          <a href="#">
             <span className="material-symbols-outlined">privacy_tip</span>
             <h3>Políticas de Uso</h3>
           </a>
 
-          <a href="">
+          <a href="#">
             <span className="material-symbols-outlined">shield_person</span>
             <h3>Políticas de Privacidad</h3>
           </a>
 
           {/* Agregar evento onClick para cerrar sesión */}
-          <a href="" onClick={handleLogout}>
+          <a href="#" onClick={handleLogout}>
             <span className="material-icons-sharp">logout</span>
             <h3>Cerrar Sesión</h3>
           </a>

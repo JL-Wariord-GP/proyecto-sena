@@ -3,6 +3,8 @@
 /*! ========== ROOT VAR ==========*/
 
 :root {
+  --color-h1-Diagno: #0099ff;
+  --color-h1-Citas: #9966ff;
   --color-primary: #7380ec;
   --color-danger: #ff7782;
   --color-success: #41f1b6;
@@ -128,7 +130,11 @@ small {
 }
 
 .text-muted {
-  color: var(--color-info-dark);
+  color: var(--color-h1-Diagno);
+}
+
+.text-muted-span {
+  color: var(--color-h1-Citas);
 }
 
 .text-muted:hover {
