@@ -84,6 +84,7 @@ body {
     opacity: 1;
   }
 }
+
 a {
   color: var(--color-dark);
 }
@@ -180,17 +181,18 @@ aside .top {
 
 aside .logo {
   display: flex;
-  gap: 0.8rem;
+align-items: center;
 }
 
 aside .logo img {
-  width: 2rem;
-  height: 2rem;
+  width: 5rem;
+  height: 5rem;
 }
 
 aside .close {
   display: none;
 }
+
 
 /*! ========== SIDEBAR ========== */
 
@@ -654,6 +656,7 @@ main .recent-orders a {
     padding-right: var(--card-padding);
     display: none;
     animation: showMenu 400ms ease forwards;
+    transition: 300ms all;
   }
 
   @keyframes showMenu {

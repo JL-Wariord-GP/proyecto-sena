@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/login.module.css";
@@ -7,18 +7,9 @@ import Register from "../assets/register.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 const Login = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const [isMainLoading, setIsMainLoading] = useState(false);
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timeout);
-  }, []);
 
   const {
     register: signInRegister,
@@ -44,6 +35,8 @@ const Login = () => {
   const signUpUsername = signUpWatch("signUpUsername");
   const signUpPassword = signUpWatch("signUpPassword");
 
+  const signUpEmail = signUpWatch("signUpEmail");
+
   const onSubmitSignIn = () => {
     if (!signInUsername || !signInPassword) {
       alert("Por favor, complete todos los campos");
@@ -68,7 +61,7 @@ const Login = () => {
   };
 
   const onSubmitSignUp = () => {
-    if (!signUpUsername || !signUpPassword) {
+    if (!signUpUsername || !signUpPassword || !signUpEmail) {
       alert("Por favor, complete todos los campos");
       return;
     }
@@ -85,13 +78,9 @@ const Login = () => {
     setIsSignUpMode(false);
   };
 
-  if (isLoading) {
-    return (
-      <div className={styles.loading}>
-        <p>Cargando...</p>
-      </div>
-    );
-  }
+  const handleDragStart = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <div
@@ -100,8 +89,18 @@ const Login = () => {
       }`}
     >
       {isMainLoading && (
-        <div className={styles.loading}>
-          <p>Cargando página principal...</p>
+        <div className={styles.loaderPill}>
+          <div className={styles["loaderPill-anim"]}>
+            <div className={styles["loaderPill-anim-bounce"]}>
+              <div className={styles["loaderPill-anim-flop"]}>
+                <div className={styles["loaderPill-pill"]}></div>
+              </div>
+            </div>
+          </div>
+          <div className={styles["loaderPill-floor"]}>
+            <div className={styles["loaderPill-floor-shadow"]}></div>
+          </div>
+          <div className={styles["loaderPill-text"]}></div>
         </div>
       )}
       <div className="forms-container">
@@ -118,6 +117,7 @@ const Login = () => {
             <div className="input-field">
               <i className="fas fa-user" />
               <input
+                className="input-text"
                 type="text"
                 placeholder="Usuario"
                 {...signInRegister("signInUsername", { required: true })}
@@ -168,6 +168,7 @@ const Login = () => {
             <div className="input-field">
               <i className="fas fa-user" />
               <input
+                className="input-text"
                 type="text"
                 placeholder="Usuario"
                 {...signUpRegister("signUpUsername", { required: true })}
@@ -178,7 +179,14 @@ const Login = () => {
             </div>
             <div className="input-field">
               <i className="fas fa-envelope"></i>
-              <input type="email" placeholder="Email" />
+              <input
+                type="email"
+                placeholder="Email"
+                {...signUpRegister("signUpEmail", { required: true })}
+              />
+              {signUpErrors.signUpEmail && (
+                <span className="error-message">Email requerido</span>
+              )}
             </div>
             <div className="input-field">
               <i className="fas fa-lock" />
@@ -213,29 +221,48 @@ const Login = () => {
       <div className="panels-container">
         <div className="panel left-panel">
           <div className="content">
-            <h3>¿Nuevo por aquí?</h3>
+            <h3>¡Bienvenido a nuestro servicio de citas!</h3>
             <p>
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
-              ex ratione. Aliquid!
+              Organiza tus citas de manera eficiente y segura con nosotros.{" "}
+              <br />
+              ¿No tienes cuenta?
             </p>
-            <button className="btn transparent" onClick={handleSignUpMode}>
+            <button
+              className="btn transparent btn-hover"
+              onClick={handleSignUpMode}
+            >
               Registrarse
             </button>
           </div>
-          <img src={Log} className="image" alt="" />
+
+          <img
+            src={Log}
+            className="image"
+            alt=""
+            onDragStart={handleDragStart}
+          />
         </div>
         <div className="panel right-panel">
           <div className="content">
-            <h3>¿Ya tiene una cuenta?</h3>
+            <h3>¿Ya tienes una cuenta?</h3>
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-              laboriosam ad deleniti.
+              Accede a tu cuenta para gestionar tus citas de manera eficiente.
+              Estamos aquí para simplificar tu experiencia.
             </p>
-            <button className="btn transparent" onClick={handleSignInMode}>
+            <button
+              className="btn transparent btn-hover"
+              onClick={handleSignInMode}
+            >
               Iniciar Sesión
             </button>
           </div>
-          <img src={Register} className="image" alt="" />
+
+          <img
+            src={Register}
+            className="image"
+            alt=""
+            onDragStart={handleDragStart}
+          />
         </div>
       </div>
     </div>

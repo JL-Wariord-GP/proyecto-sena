@@ -1,5 +1,5 @@
 // Aside.js
-import Logo from "../assets/logo.png";
+import Logo from "../assets/LogoDiagnoCita.png";
 import { useNavigate } from "react-router-dom";
 
 function Aside() {

@@ -3,11 +3,12 @@
 import SalesAnalytics from "./SalesAnalytics";
 
 function Right() {
+  
   return (
     <div className="right">
       <div className="right">
         <div className="top">
-          <button id="menu-btn">
+          <button id="menu-btn" >
             <span className="material-icons-sharp">menu</span>
           </button>
           <div className="theme-toggler">
@@ -22,7 +23,7 @@ function Right() {
               <small className="text-muted">Admin</small>
             </div>
           </div>
-          <div className="profile-photo">
+          <div className="profile-photo">``
             <img src="./images/profile-1.jpg" alt="Profile" />
           </div>
         </div>
