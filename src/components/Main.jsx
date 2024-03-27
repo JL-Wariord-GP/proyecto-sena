@@ -15,7 +15,7 @@ function Main() {
 
       <div className="insights">
         <div className="sales center">
-          <a href="">
+          <a href="#">
             <span className="material-symbols-outlined">stethoscope</span>
           </a>
           <div className="middle">
@@ -28,7 +28,7 @@ function Main() {
         {/* <!--! ---------------- EXPENSES -----------------> */}
 
         <div className="expenses center">
-          <a href="">
+          <a href="#">
             <span className="material-symbols-outlined">
               medical_information
             </span>
@@ -43,7 +43,7 @@ function Main() {
         {/* <!--! ---------------- INCOME -----------------> */}
 
         <div className="income center">
-          <a href="">
+          <a href="#">
             <span className="material-symbols-outlined">diagnosis</span>
           </a>
           <div className="middle">
