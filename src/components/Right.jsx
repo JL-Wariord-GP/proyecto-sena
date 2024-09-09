@@ -17,10 +17,6 @@ function Right() {
             <small className="text-muted">Admin</small>
           </div>
         </div>
-        <div className="profile-photo">
-          ``
-          <img src="./images/profile-1.jpg" alt="Profile" />
-        </div>
       </div>
 
       {/* <!--! ---------------- STATE -----------------> */}

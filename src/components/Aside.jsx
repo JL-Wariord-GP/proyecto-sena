@@ -2,7 +2,7 @@ import Logo from "../assets/LogoDiagnoCita.png";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types"; // Importa PropTypes para definir el tipo de la prop
 
-function Aside({ btnMenu }) {
+function Aside() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -11,7 +11,7 @@ function Aside({ btnMenu }) {
     // Redirigir al usuario a la página de inicio de sesión
     navigate("/");
   };
-console.log(btnMenu);
+
   return (
     <aside >
       <div className="top">
