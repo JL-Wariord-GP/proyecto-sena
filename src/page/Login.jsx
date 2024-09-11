@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { login, register } from "../services/authService";
 import styles from "../css/login.module.css";
 import Log from "../assets/log.svg";
 import Register from "../assets/register.svg";
@@ -11,6 +12,7 @@ const Login = () => {
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const navigate = useNavigate();
 
+  // React Hook Form for Sign In
   const {
     register: signInRegister,
     handleSubmit: handleSignInSubmit,
@@ -19,6 +21,7 @@ const Login = () => {
     watch: signInWatch,
   } = useForm();
 
+  // React Hook Form for Sign Up
   const {
     register: signUpRegister,
     handleSubmit: handleSignUpSubmit,
@@ -27,67 +30,115 @@ const Login = () => {
     watch: signUpWatch,
   } = useForm();
 
-  const predefinedUser = { username: "admin", password: "123456" };
+  // Handler for Sign In
+  const onSubmitSignIn = async () => {
+    const signInEmail = signInWatch("signInEmail");
+    const signInPassword = signInWatch("signInPassword");
 
-  const signInUsername = signInWatch("signInUsername");
-  const signInPassword = signInWatch("signInPassword");
-
-  const signUpUsername = signUpWatch("signUpUsername");
-  const signUpPassword = signUpWatch("signUpPassword");
-
-  const signUpEmail = signUpWatch("signUpEmail");
-
-  const onSubmitSignIn = () => {
-    if (!signInUsername || !signInPassword) {
+    if (!signInEmail || !signInPassword) {
       alert("Por favor, complete todos los campos");
       return;
     }
 
-    if (
-      signInUsername === predefinedUser.username &&
-      signInPassword === predefinedUser.password
-    ) {
-      console.log("ingreso exitoso");
+    try {
       setIsMainLoading(true);
-      setTimeout(() => {
-        setIsMainLoading(false);
-        navigate("/main");
-      }, 2000);
-    } else {
-      alert("Credenciales incorrectas");
-    }
 
-    resetSignIn();
+      // Realiza la llamada a la API de login
+      const response = await login({
+        email: signInEmail,
+        password: signInPassword,
+      });
+
+      // Si la respuesta es exitosa, maneja la redirección
+      if (response && response.token) {
+        // Puedes almacenar el token en una variable de estado o contexto para usarlo en la aplicación
+        // Ejemplo: setAuthToken(response.token);
+
+        // Redirige al usuario a la página principal
+        setTimeout(() => {
+          setIsMainLoading(false);
+          navigate("/main");
+        }, 2000);
+      } else {
+        throw new Error("No se recibió un token en la respuesta.");
+      }
+    } catch (error) {
+      alert(`Error en el inicio de sesión: ${error.message}`);
+    } finally {
+      resetSignIn();
+      setIsMainLoading(false);
+    }
   };
 
-  const onSubmitSignUp = () => {
+  // Handler for Sign Up
+  const onSubmitSignUp = async () => {
+    const signUpUsername = signUpWatch("signUpUsername");
+    const signUpPassword = signUpWatch("signUpPassword");
+    const signUpEmail = signUpWatch("signUpEmail");
+
     if (!signUpUsername || !signUpPassword || !signUpEmail) {
       alert("Por favor, complete todos los campos");
       return;
     }
 
-    alert("Registro exitoso");
-    resetSignUp();
+    console.log("Datos de registro enviados:", {
+      username: signUpUsername,
+      email: signUpEmail,
+      password: signUpPassword,
+    });
+
+    try {
+      setIsMainLoading(true);
+      const response = await register({
+        username: signUpUsername,
+        email: signUpEmail,
+        password: signUpPassword,
+      });
+
+      console.log("Registro exitoso:", response);
+      alert("Registro exitoso");
+    } catch (error) {
+      console.error("Error en el registro:", error);
+      alert(`Error en el registro: ${error.message}`);
+    } finally {
+      resetSignUp();
+      setIsMainLoading(false);
+    }
   };
 
-  const handleSignUpMode = () => {
-    setIsSignUpMode(true);
-  };
+  {
+    /* 
+    VALIDACION DE LA API VISUALIZACION
 
-  const handleSignInMode = () => {
-    setIsSignUpMode(false);
-  };
+      useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/api/auth/users"
+        );
+        console.log("API Response:", response);
+      } catch (err) {
+        console.error("API Error:", err.message);
+      }
+    };
 
-  const handleDragStart = (e) => {
-    e.preventDefault();
-  };
+    fetchUsers();
+  }, []);
+    
+ 
+    */
+  }
+
+  // Handlers for switching between Sign In and Sign Up modes
+  const handleSignUpMode = () => setIsSignUpMode(true);
+  const handleSignInMode = () => setIsSignUpMode(false);
+  const handleDragStart = (e) => e.preventDefault();
 
   return (
     <div
       className={`${styles.container} ${
         isSignUpMode ? styles["sign-up-mode"] : ""
-      }`}
-    >
+      }`}>
       {isMainLoading && (
         <div className={styles.loaderPill}>
           <div className={styles["loaderPill-anim"]}>
@@ -103,27 +154,32 @@ const Login = () => {
           <div className={styles["loaderPill-text"]}></div>
         </div>
       )}
+
       <div className="forms-container">
         <div className="signin-signup">
+          {/* Sign In Form */}
           <form
-            onSubmit={
-              isSignUpMode
-                ? handleSignUpSubmit(onSubmitSignUp)
-                : handleSignInSubmit(onSubmitSignIn)
-            }
-            className="sign-in-form"
-          >
+            onSubmit={handleSignInSubmit(onSubmitSignIn)}
+            className="sign-in-form">
             <h2 className="title">Iniciar Sesión</h2>
             <div className="input-field">
-              <i className="fas fa-user" />
+              <i className="fas fa-envelope" />
               <input
                 className="input-text"
-                type="text"
-                placeholder="Usuario"
-                {...signInRegister("signInUsername", { required: true })}
+                type="email"
+                placeholder="Correo Electrónico"
+                {...signInRegister("signInEmail", {
+                  required: "Correo electrónico requerido",
+                  pattern: {
+                    value: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                    message: "Correo electrónico no válido",
+                  },
+                })}
               />
-              {signInErrors.signInUsername && (
-                <span className="error-message">Usuario requerido</span>
+              {signInErrors.signInEmail && (
+                <span className="error-message">
+                  {signInErrors.signInEmail.message}
+                </span>
               )}
             </div>
             <div className="input-field">
@@ -131,39 +187,23 @@ const Login = () => {
               <input
                 type="password"
                 placeholder="Contraseña"
-                {...signInRegister("signInPassword", { required: true })}
+                {...signInRegister("signInPassword", {
+                  required: "Contraseña requerida",
+                })}
               />
               {signInErrors.signInPassword && (
-                <span className="error-message">Contraseña requerida</span>
+                <span className="error-message">
+                  {signInErrors.signInPassword.message}
+                </span>
               )}
             </div>
             <input type="submit" className="btn solid" value="Iniciar Sesión" />
-            <p className="social-text">
-              Iniciar sesión con plataformas sociales
-            </p>
-            <div className="social-media">
-              <a href="#" className="social-icon">
-                <i className="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" className="social-icon">
-                <i className="fab fa-twitter"></i>
-              </a>
-              <a href="#" className="social-icon">
-                <i className="fab fa-google"></i>
-              </a>
-              <a href="#" className="social-icon">
-                <i className="fab fa-linkedin-in"></i>
-              </a>
-            </div>
           </form>
+
+          {/* Sign Up Form */}
           <form
-            onSubmit={
-              isSignUpMode
-                ? handleSignUpSubmit(onSubmitSignUp)
-                : handleSignUpSubmit(onSubmitSignIn)
-            }
-            className="sign-up-form"
-          >
+            onSubmit={handleSignUpSubmit(onSubmitSignUp)}
+            className="sign-up-form">
             <h2 className="title">Registrarse</h2>
             <div className="input-field">
               <i className="fas fa-user" />
@@ -171,21 +211,33 @@ const Login = () => {
                 className="input-text"
                 type="text"
                 placeholder="Usuario"
-                {...signUpRegister("signUpUsername", { required: true })}
+                {...signUpRegister("signUpUsername", {
+                  required: "Usuario requerido",
+                  pattern: {
+                    value: /^\S+$/,
+                    message: "El usuario no puede contener espacios",
+                  },
+                })}
               />
               {signUpErrors.signUpUsername && (
-                <span className="error-message">Usuario requerido</span>
+                <span className="error-message">
+                  {signUpErrors.signUpUsername.message}
+                </span>
               )}
             </div>
             <div className="input-field">
-              <i className="fas fa-envelope"></i>
+              <i className="fas fa-envelope" />
               <input
                 type="email"
                 placeholder="Email"
-                {...signUpRegister("signUpEmail", { required: true })}
+                {...signUpRegister("signUpEmail", {
+                  required: "Email requerido",
+                })}
               />
               {signUpErrors.signUpEmail && (
-                <span className="error-message">Email requerido</span>
+                <span className="error-message">
+                  {signUpErrors.signUpEmail.message}
+                </span>
               )}
             </div>
             <div className="input-field">
@@ -193,55 +245,43 @@ const Login = () => {
               <input
                 type="password"
                 placeholder="Contraseña"
-                {...signUpRegister("signUpPassword", { required: true })}
+                {...signUpRegister("signUpPassword", {
+                  required: "Contraseña requerida",
+                })}
               />
               {signUpErrors.signUpPassword && (
-                <span className="error-message">Contraseña requerida</span>
+                <span className="error-message">
+                  {signUpErrors.signUpPassword.message}
+                </span>
               )}
             </div>
             <input type="submit" className="btn" value="Registrarse" />
-            <p className="social-text">Regístrate con plataformas sociales</p>
-            <div className="social-media">
-              <a href="#" className="social-icon">
-                <i className="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" className="social-icon">
-                <i className="fab fa-twitter"></i>
-              </a>
-              <a href="#" className="social-icon">
-                <i className="fab fa-google"></i>
-              </a>
-              <a href="#" className="social-icon">
-                <i className="fab fa-linkedin-in"></i>
-              </a>
-            </div>
           </form>
         </div>
       </div>
+
       <div className="panels-container">
         <div className="panel left-panel">
           <div className="content">
             <h3>¡Bienvenido a nuestro servicio de citas!</h3>
             <p>
               Organiza tus citas de manera eficiente y segura con nosotros.{" "}
-              <br />
-              ¿No tienes cuenta?
+              <br /> ¿No tienes cuenta?
             </p>
             <button
               className="btn transparent btn-hover"
-              onClick={handleSignUpMode}
-            >
+              onClick={handleSignUpMode}>
               Registrarse
             </button>
           </div>
-
           <img
             src={Log}
             className="image"
-            alt=""
+            alt="Imagen de registro"
             onDragStart={handleDragStart}
           />
         </div>
+
         <div className="panel right-panel">
           <div className="content">
             <h3>¿Ya tienes una cuenta?</h3>
@@ -251,16 +291,14 @@ const Login = () => {
             </p>
             <button
               className="btn transparent btn-hover"
-              onClick={handleSignInMode}
-            >
+              onClick={handleSignInMode}>
               Iniciar Sesión
             </button>
           </div>
-
           <img
             src={Register}
             className="image"
-            alt=""
+            alt="Imagen de inicio de sesión"
             onDragStart={handleDragStart}
           />
         </div>
