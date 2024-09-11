@@ -2,7 +2,8 @@ import Swal from "sweetalert2";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { login, register } from "../services/authService";
+import { login as loginService, register } from "../services/authService"; // Renombrar para evitar conflictos de nombre
+import useAuth from "../contexts/useAuth"; // Importar useAuth desde el contexto
 import styles from "../css/login.module.css";
 import Log from "../assets/log.svg";
 import Register from "../assets/register.svg";
@@ -17,6 +18,7 @@ const Login = () => {
   const [isMainLoading, setIsMainLoading] = useState(false);
   const [isSignUpMode, setIsSignUpMode] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth(); // Extraer la función login del contexto
 
   // React Hook Form for Sign In
   const {
@@ -53,7 +55,7 @@ const Login = () => {
 
     try {
       setIsMainLoading(true);
-      const response = await login({
+      const response = await loginService({
         email: signInEmail,
         password: signInPassword,
       });
@@ -67,6 +69,10 @@ const Login = () => {
       // Si la respuesta es exitosa, maneja la redirección
       if (response && response.token) {
         localStorage.setItem("authToken", response.token);
+
+        // Llama a la función `login` del contexto para actualizar el nombre del usuario
+        await login(response.token);
+
         setTimeout(() => {
           setIsMainLoading(false);
           navigate("/main");
@@ -133,29 +139,6 @@ const Login = () => {
       setIsMainLoading(false);
     }
   };
-
-  {
-    /* 
-    VALIDACION DE LA API VISUALIZACION
-
-      useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3000/api/auth/users"
-        );
-        console.log("API Response:", response);
-      } catch (err) {
-        console.error("API Error:", err.message);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-    
- 
-    */
-  }
 
   // Handlers for switching between Sign In and Sign Up modes
   const handleSignUpMode = () => setIsSignUpMode(true);
