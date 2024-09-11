@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +7,11 @@ import styles from "../css/login.module.css";
 import Log from "../assets/log.svg";
 import Register from "../assets/register.svg";
 import "@fortawesome/fontawesome-free/css/all.css";
+
+// Función para capitalizar la primera letra
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
 
 const Login = () => {
   const [isMainLoading, setIsMainLoading] = useState(false);
@@ -36,25 +42,31 @@ const Login = () => {
     const signInPassword = signInWatch("signInPassword");
 
     if (!signInEmail || !signInPassword) {
-      alert("Por favor, complete todos los campos");
+      Swal.fire({
+        title: "Error",
+        text: "Por favor, complete todos los campos",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
       return;
     }
 
     try {
       setIsMainLoading(true);
-
-      // Realiza la llamada a la API de login
       const response = await login({
         email: signInEmail,
         password: signInPassword,
       });
 
+      Swal.fire({
+        title: "Inicio de sesión exitoso!",
+        icon: "success",
+        confirmButtonText: "OK",
+      });
+
       // Si la respuesta es exitosa, maneja la redirección
       if (response && response.token) {
-        // Puedes almacenar el token en una variable de estado o contexto para usarlo en la aplicación
-        // Ejemplo: setAuthToken(response.token);
-
-        // Redirige al usuario a la página principal
+        localStorage.setItem("authToken", response.token);
         setTimeout(() => {
           setIsMainLoading(false);
           navigate("/main");
@@ -63,7 +75,12 @@ const Login = () => {
         throw new Error("No se recibió un token en la respuesta.");
       }
     } catch (error) {
-      alert(`Error en el inicio de sesión: ${error.message}`);
+      Swal.fire({
+        title: "Error",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     } finally {
       resetSignIn();
       setIsMainLoading(false);
@@ -77,29 +94,40 @@ const Login = () => {
     const signUpEmail = signUpWatch("signUpEmail");
 
     if (!signUpUsername || !signUpPassword || !signUpEmail) {
-      alert("Por favor, complete todos los campos");
+      Swal.fire({
+        title: "Error",
+        text: "Por favor, complete todos los campos",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
       return;
     }
 
-    console.log("Datos de registro enviados:", {
-      username: signUpUsername,
-      email: signUpEmail,
+    // Transforma los datos del formulario
+    const transformedData = {
+      username: capitalizeFirstLetter(signUpUsername.trim()),
+      email: signUpEmail.trim().toLowerCase(),
       password: signUpPassword,
-    });
+    };
 
     try {
       setIsMainLoading(true);
-      const response = await register({
-        username: signUpUsername,
-        email: signUpEmail,
-        password: signUpPassword,
-      });
+      const response = await register(transformedData);
 
-      console.log("Registro exitoso:", response);
-      alert("Registro exitoso");
+      if (response) {
+        Swal.fire({
+          title: "Registro exitoso!",
+          icon: "success",
+          confirmButtonText: "OK",
+        });
+      }
     } catch (error) {
-      console.error("Error en el registro:", error);
-      alert(`Error en el registro: ${error.message}`);
+      Swal.fire({
+        title: "Error",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "OK",
+      });
     } finally {
       resetSignUp();
       setIsMainLoading(false);
@@ -213,10 +241,6 @@ const Login = () => {
                 placeholder="Usuario"
                 {...signUpRegister("signUpUsername", {
                   required: "Usuario requerido",
-                  pattern: {
-                    value: /^\S+$/,
-                    message: "El usuario no puede contener espacios",
-                  },
                 })}
               />
               {signUpErrors.signUpUsername && (

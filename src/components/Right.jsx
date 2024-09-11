@@ -1,7 +1,11 @@
-import SalesAnalytics from "./SalesAnalytics";
+// components/Right.js
+
 import PropTypes from "prop-types";
+import SalesAnalytics from "./SalesAnalytics";
+import useAuth from "../contexts/useAuth";
 
 function Right() {
+  const { firstName } = useAuth();
 
   return (
     <div className="right">
@@ -12,7 +16,7 @@ function Right() {
         <div className="profile">
           <div className="info">
             <p>
-              Hey, <b>Jorge</b>
+              Hey, <b>{firstName}</b>
             </p>
             <small className="text-muted">Admin</small>
           </div>
@@ -59,7 +63,7 @@ function Right() {
 }
 
 Right.propTypes = {
-  btnMenu: PropTypes.node
-}
+  btnMenu: PropTypes.node,
+};
 
 export default Right;

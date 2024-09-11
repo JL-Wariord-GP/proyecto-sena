@@ -1,13 +1,16 @@
-// Main.js
+// components/Main.js
 
+import useAuth from "../contexts/useAuth";
 import RecentOrders from "./RecentOrders";
 import "material-symbols";
 
 function Main() {
+  const { firstName } = useAuth();
+
   return (
     <main>
       <h1>
-        Hola, <span className="span-h1">Jorge</span>
+        Hola, <span className="span-h1">{firstName}</span>
       </h1>
       <h2 className="text-style-h2">Nuestra recomendación para ti:</h2>
 
