@@ -1,19 +1,21 @@
 import Logo from "../assets/LogoDiagnoCita.png";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types"; // Importa PropTypes para definir el tipo de la prop
+import PropTypes from "prop-types";
 
 function Aside() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Eliminar los datos del usuario del Local Storage al cerrar sesión
+    // Eliminar el token de autenticación del Local Storage
+    localStorage.removeItem("authToken");
+    // Eliminar otros datos del usuario del Local Storage si es necesario
     localStorage.removeItem("user");
     // Redirigir al usuario a la página de inicio de sesión
     navigate("/");
   };
 
   return (
-    <aside >
+    <aside>
       <div className="top">
         <div className="logo">
           <img src={Logo} alt="Logo" />
@@ -71,7 +73,7 @@ function Aside() {
         </a>
 
         {/* Agregar evento onClick para cerrar sesión */}
-        <a href="#" onClick={handleLogout}>
+        <a onClick={handleLogout}>
           <span className="material-icons-sharp">logout</span>
           <h3>Cerrar Sesión</h3>
         </a>
@@ -82,7 +84,7 @@ function Aside() {
 
 // Define el tipo de la prop btnMenu
 Aside.propTypes = {
-  btnMenu: PropTypes.node
+  btnMenu: PropTypes.node,
 };
 
 export default Aside;

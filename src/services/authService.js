@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 
-const API_URL = "https://server-db-project.onrender.com/api/auth";
-//const API_URL = "http://localhost:3000/api/auth";
+const API_URL = "http://localhost:3000/api/auth"; // Ajustar según tu entorno
+//const API_URL = "https://server-db-project.onrender.com/api/auth";
 
 export const login = async (credentials) => {
   try {
@@ -11,10 +11,11 @@ export const login = async (credentials) => {
       body: JSON.stringify(credentials),
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      // Intenta obtener el mensaje de error del servidor
-      const errorData = await response.json();
-      const errorMessage = errorData.message || "Credenciales inválidas";
+      // El mensaje de error viene directamente del backend
+      const errorMessage = data.error || "Credenciales inválidas";
       Swal.fire({
         title: "Error",
         text: errorMessage,
@@ -24,11 +25,16 @@ export const login = async (credentials) => {
       throw new Error(errorMessage);
     }
 
-    // Si la respuesta es exitosa, retorna los datos
-    return await response.json();
+    return data;
   } catch (error) {
-    // Asegúrate de que `error.message` tenga un valor válido
-    throw new Error(error.message || "Error al iniciar sesión");
+    Swal.fire({
+      title: "Error",
+      text: error.message || "Error al iniciar sesión",
+      icon: "error",
+      confirmButtonText: "OK",
+    });
+
+    throw error; // Asegúrate de que la excepción sea lanzada para que el flujo del frontend la capture
   }
 };
 
@@ -40,9 +46,11 @@ export const register = async (userData) => {
       body: JSON.stringify(userData),
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      const errorData = await response.json();
-      const errorMessage = errorData.message || "Error al registrarse";
+      // El mensaje de error viene directamente del backend
+      const errorMessage = data.error || "Error al registrarse";
       Swal.fire({
         title: "Error",
         text: errorMessage,
@@ -52,9 +60,15 @@ export const register = async (userData) => {
       throw new Error(errorMessage);
     }
 
-    return await response.json();
+    return data;
   } catch (error) {
-    // Asegúrate de que `error.message` tenga un valor válido
-    throw new Error(error.message || "Error al registrarse");
+    Swal.fire({
+      title: "Error",
+      text: error.message || "Error al registrarse",
+      icon: "error",
+      confirmButtonText: "OK",
+    });
+
+    throw error;
   }
 };

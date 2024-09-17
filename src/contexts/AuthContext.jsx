@@ -12,6 +12,11 @@ export const AuthProvider = ({ children }) => {
 
   // Función para iniciar sesión y actualizar el contexto con los datos del usuario
   const login = async (token) => {
+    if (!token) {
+      console.error("Token no válido o no proporcionado");
+      return;
+    }
+
     try {
       const response = await fetch(`${API_URL}/me`, {
         headers: {
@@ -20,7 +25,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -42,7 +47,10 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("authToken");
 
     if (token) {
-      login(token); // Llama a la función login cuando se carga el componente
+      // Si hay un token, intenta hacer login
+      login(token);
+    } else {
+      console.warn("No hay token de autenticación disponible");
     }
   }, []);
 

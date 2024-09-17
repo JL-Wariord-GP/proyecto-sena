@@ -1,8 +1,8 @@
+// src/hooks/useAuth.js
 import { useContext } from "react";
-import AuthContext from "./AuthContext";
+import AuthContext from "../contexts/useAuthProvider"; // Importa el contexto desde su nuevo archivo
 
-const useAuth = () => {
-  return useContext(AuthContext);
-};
+// Hook para usar el contexto de autenticación
+const useAuth = () => useContext(AuthContext);
 
 export default useAuth;
