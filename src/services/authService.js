@@ -1,7 +1,7 @@
 import Swal from "sweetalert2";
 
-const API_URL = "http://localhost:3000/api/auth"; // Ajustar según tu entorno
-//const API_URL = "https://server-db-project.onrender.com/api/auth";
+//const API_URL = "http://localhost:3000/api/auth"; // Ajustar según tu entorno
+const API_URL = "https://server-db-project.onrender.com/api/auth";
 
 export const login = async (credentials) => {
   try {
