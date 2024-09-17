@@ -2,8 +2,8 @@ import Swal from "sweetalert2";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { login as loginService, register } from "../services/authService"; // Renombrar para evitar conflictos de nombre
-import useAuth from "../contexts/useAuth"; // Importar useAuth desde el contexto
+import { login as loginService, register } from "../services/authService"; 
+import useAuth from "../contexts/useAuth"; 
 import styles from "../css/login.module.css";
 import Log from "../assets/log.svg";
 import Register from "../assets/register.svg";
