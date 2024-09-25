@@ -1,11 +1,9 @@
-// AuthContext.jsx
+//AuthContext.jsx
 import { createContext, useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { makeRequest } from "./authService"; // Importa la función auxiliar makeRequest
 
 const AuthContext = createContext();
-
-const API_URL = "https://server-db-project.onrender.com/api/auth";
-//const API_URL = "http://localhost:3000/api/auth";
 
 export const AuthProvider = ({ children }) => {
   const [firstName, setFirstName] = useState("");
@@ -18,17 +16,9 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await fetch(`${API_URL}/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      // Reutiliza makeRequest para obtener los datos del usuario autenticado
+      const data = await makeRequest("/me", "GET", null, token);
 
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} - ${response.statusText}`);
-      }
-
-      const data = await response.json();
       if (data && data.username) {
         const username = data.username;
         const firstName = username.split(" ")[0];

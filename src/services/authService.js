@@ -1,21 +1,32 @@
+//authService.js
 import Swal from "sweetalert2";
-
-//const API_URL = "http://localhost:3000/api/auth"; // Ajustar según tu entorno
+//const API_URL = "http://localhost:3000/api/auth";
 const API_URL = "https://server-db-project.onrender.com/api/auth";
 
-export const login = async (credentials) => {
+// Función auxiliar para manejar todas las solicitudes al servidor
+export const makeRequest = async (
+  endpoint,
+  method,
+  body = null,
+  token = null
+) => {
   try {
-    const response = await fetch(`${API_URL}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(credentials),
+    const headers = { "Content-Type": "application/json" };
+
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${API_URL}${endpoint}`, {
+      method: method,
+      headers: headers,
+      body: body ? JSON.stringify(body) : null,
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      // El mensaje de error viene directamente del backend
-      const errorMessage = data.error || "Credenciales inválidas";
+      const errorMessage = data.error || "Ocurrió un error inesperado";
       Swal.fire({
         title: "Error",
         text: errorMessage,
@@ -29,46 +40,20 @@ export const login = async (credentials) => {
   } catch (error) {
     Swal.fire({
       title: "Error",
-      text: error.message || "Error al iniciar sesión",
+      text: error.message || "Error al procesar la solicitud",
       icon: "error",
       confirmButtonText: "OK",
     });
-
-    throw error; // Asegúrate de que la excepción sea lanzada para que el flujo del frontend la capture
+    throw error;
   }
 };
 
+// Función para iniciar sesión
+export const login = async (credentials) => {
+  return await makeRequest("/login", "POST", credentials);
+};
+
+// Función para registrar un nuevo usuario
 export const register = async (userData) => {
-  try {
-    const response = await fetch(`${API_URL}/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userData),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      // El mensaje de error viene directamente del backend
-      const errorMessage = data.error || "Error al registrarse";
-      Swal.fire({
-        title: "Error",
-        text: errorMessage,
-        icon: "error",
-        confirmButtonText: "OK",
-      });
-      throw new Error(errorMessage);
-    }
-
-    return data;
-  } catch (error) {
-    Swal.fire({
-      title: "Error",
-      text: error.message || "Error al registrarse",
-      icon: "error",
-      confirmButtonText: "OK",
-    });
-
-    throw error;
-  }
+  return await makeRequest("/register", "POST", userData);
 };
