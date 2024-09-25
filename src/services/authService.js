@@ -1,4 +1,3 @@
-//authService.js
 import Swal from "sweetalert2";
 //const API_URL = "http://localhost:3000/api/auth";
 const API_URL = "https://server-db-project.onrender.com/api/auth";
