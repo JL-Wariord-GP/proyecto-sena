@@ -2,8 +2,8 @@
 
 import Swal from "sweetalert2";
 
-//const API_URL = "https://server-db-project.onrender.com/api/auth"; // Cambia esto por tu URL de API
-const API_URL = "http://localhost:3000/api/auth"; // Cambia esto por tu URL de API
+const API_URL = "https://server-db-project.onrender.com/api/auth"; // Cambia esto por tu URL de API
+//const API_URL = "http://localhost:3000/api/auth"; // Cambia esto por tu URL de API
 
 // Función auxiliar para manejar todas las solicitudes al servidor
 const makeRequest = async (endpoint, method, body = null, token = null) => {
