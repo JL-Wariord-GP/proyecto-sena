@@ -1,30 +1,31 @@
 import { useState } from "react";
 import ReactModal from "react-modal";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import Calendar from "react-calendar"; 
+import "react-calendar/dist/Calendar.css";
 import PropTypes from "prop-types";
-
+import "../css/AppointmentModal.css"; // Archivo CSS para estilos personalizados
 
 ReactModal.setAppElement("#root");
 
 const AppointmentModal = ({ isOpen, onRequestClose }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [appointmentDate, setAppointmentDate] = useState(null);
-  const [phone, setPhone] = useState("");
-  const [notes, setNotes] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedTime, setSelectedTime] = useState("");
   const [isValid, setIsValid] = useState(true);
+
+  const availableTimes = ["11:45", "12:15", "12:45", "13:15", "13:45", "14:15"];
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!name || !email || !appointmentDate || !phone) {
+    if (!selectedDate || !selectedTime) {
       setIsValid(false);
       return;
     }
 
     setIsValid(true);
-    alert("Cita agendada con éxito!");
+    alert(
+      `Cita agendada para el ${selectedDate.toLocaleDateString()} a las ${selectedTime}`
+    );
     onRequestClose();
   };
 
@@ -32,85 +33,50 @@ const AppointmentModal = ({ isOpen, onRequestClose }) => {
     <ReactModal
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      contentLabel="Agendar Cita">
+      contentLabel="Agendar Cita"
+      className="custom-modal"
+      overlayClassName="custom-modal-overlay">
       <div className="modal-container">
-        <h2>Agendar Cita</h2>
-        <form onSubmit={handleSubmit} className="appointment-form">
-          <div className="form-group">
-            <label htmlFor="name">Nombre Completo</label>
-            <input
-              type="text"
-              id="name"
-              placeholder="Ingresa tu nombre"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
+        <h2 className="modal-title">Agendamiento de cita</h2>
+        <p className="modal-duration">-- ⏱ --</p>
+        <div className="calendar-container">
+          <h3>Selecciona una fecha:</h3>
+          <Calendar
+            onChange={setSelectedDate}
+            value={selectedDate}
+            minDate={new Date()}
+          />
+        </div>
+        {selectedDate && (
+          <div className="time-slot-container">
+            <h3>Selecciona una hora:</h3>
+            <div className="time-slots">
+              {availableTimes.map((time) => (
+                <button
+                  key={time}
+                  className={`time-slot ${
+                    selectedTime === time ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedTime(time)}>
+                  {time}
+                </button>
+              ))}
+            </div>
           </div>
-
-          <div className="form-group">
-            <label htmlFor="email">Correo Electrónico</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="Ingresa tu correo"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="phone">Teléfono</label>
-            <input
-              type="tel"
-              id="phone"
-              placeholder="Ingresa tu teléfono"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="appointmentDate">Fecha y Hora de la Cita</label>
-            <DatePicker
-              selected={appointmentDate}
-              onChange={(date) => setAppointmentDate(date)}
-              showTimeSelect
-              dateFormat="Pp"
-              minDate={new Date()}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="notes">Notas Adicionales (Opcional)</label>
-            <textarea
-              id="notes"
-              placeholder="Escribe tus notas aquí..."
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}></textarea>
-          </div>
-
-          {!isValid && (
-            <p className="error-message">
-              Por favor, completa todos los campos obligatorios.
-            </p>
-          )}
-
-          <div className="modal-footer">
-            <button type="submit" className="submit-btn">
-              Agendar Cita
-            </button>
-            <button
-              type="button"
-              className="cancel-btn"
-              onClick={onRequestClose}>
-              Cancelar
-            </button>
-          </div>
-        </form>
+        )}
+        {!isValid && (
+          <p className="error-message">
+            Por favor, selecciona una fecha y una hora.
+          </p>
+        )}
+        <div className="modal-footer">
+          <button className="submit-btn" onClick={handleSubmit}>
+            Confirmar Cita
+          </button>
+          <button className="cancel-btn" onClick={onRequestClose}>
+            Cancelar
+          </button>
+        </div>
       </div>
     </ReactModal>
   );

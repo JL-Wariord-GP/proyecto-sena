@@ -18,6 +18,10 @@ function Aside() {
     // Navegar al perfil del usuario
     navigate("/profile");
   };
+  const goToMain = () => {
+    // Navegar al main
+    navigate("/main");
+  };
 
   return (
     <aside>
@@ -34,13 +38,13 @@ function Aside() {
       </div>
 
       <div className="sidebar">
-        <a href="#" className="active">
+        {/* Navegar al main */}
+        <a onClick={goToMain}>
           <span className="material-icons-sharp">grid_view</span>
           <h3>Menú Principal</h3>
         </a>
-
         {/* Navegar al perfil del usuario */}
-        <a onClick={goToProfile}>
+        <a onClick={goToProfile} className="active">
           <span className="material-icons-sharp">person_outline</span>
           <h3>Mi Perfil</h3>
         </a>

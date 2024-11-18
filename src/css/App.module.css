@@ -87,6 +87,7 @@ body {
 
 a {
   color: var(--color-dark);
+  cursor: pointer;
 }
 
 img {

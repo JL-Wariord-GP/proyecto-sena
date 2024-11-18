@@ -1,0 +1,141 @@
+/* Contenedor Principal */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Header */
+.profile-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.profile-title {
+  font-size: 2rem;
+  color: #1d3557;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.profile-subtitle {
+  font-size: 1rem;
+  color: #457b9d;
+  margin-bottom: 1.5rem;
+}
+
+/* Estilo del Main */
+.profile-main {
+  max-width: 900px;
+  margin: 3rem 5rem;
+  padding: 2.5rem;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Formulario */
+.profile-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* Input Group */
+.profile-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.profile-label {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.profile-input {
+  padding: 0.85rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #f8f9fa;
+  transition: all 0.3s ease;
+}
+
+.profile-input:focus {
+  border-color: #1d3557;
+  box-shadow: 0 0 8px rgba(29, 53, 87, 0.3);
+  background: #ffffff;
+}
+
+.profile-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Botones */
+.profile-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.profile-btn-primary {
+  background: #1d3557;
+  color: #fff;
+  padding: 0.85rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.profile-btn-primary:hover {
+  background: #457b9d;
+}
+
+.profile-btn-secondary {
+  background: #f1f1f1;
+  color: #333;
+  padding: 0.85rem 1.5rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.profile-btn-secondary:hover {
+  background: #e0e0e0;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .profile-form {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-actions {
+    flex-direction: column;
+  }
+
+  .profile-btn-primary,
+  .profile-btn-secondary {
+    width: 100%;
+  }
+}
