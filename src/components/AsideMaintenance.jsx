@@ -14,14 +14,14 @@ function Aside() {
     navigate("/");
   };
 
-  const goToProfile = () => {
-    // Navegar al perfil del usuario
-    navigate("/profile");
-  };
-
   const goToMain = () => {
     // Navegar al main
     navigate("/main");
+  };
+
+  const goToProfile = () => {
+    // Navegar al perfil del usuario
+    navigate("/profile");
   };
 
   const goToMaintenance = () => {
@@ -44,19 +44,17 @@ function Aside() {
       </div>
 
       <div className="sidebar">
-        {/* Navegar al main */}
         <a onClick={goToMain}>
           <span className="material-icons-sharp">grid_view</span>
           <h3>Menú Principal</h3>
         </a>
 
         {/* Navegar al perfil del usuario */}
-        <a onClick={goToProfile} className="active">
+        <a onClick={goToProfile}>
           <span className="material-icons-sharp">person_outline</span>
           <h3>Mi Perfil</h3>
         </a>
 
-        {/* Navegar a mantenimiento */}
         <a onClick={goToMaintenance}>
           <span className="material-symbols-outlined">
             notifications_active

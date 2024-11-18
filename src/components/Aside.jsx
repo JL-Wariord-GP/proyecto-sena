@@ -19,6 +19,11 @@ function Aside() {
     navigate("/profile");
   };
 
+  const goToMaintenance = () => {
+    // Navegar a la página de mantenimiento
+    navigate("/maintenance");
+  };
+
   return (
     <aside>
       <div className="top">
@@ -34,7 +39,7 @@ function Aside() {
       </div>
 
       <div className="sidebar">
-        <a href="#" className="active">
+        <a onClick={goToMaintenance} className="active">
           <span className="material-icons-sharp">grid_view</span>
           <h3>Menú Principal</h3>
         </a>
@@ -45,35 +50,35 @@ function Aside() {
           <h3>Mi Perfil</h3>
         </a>
 
-        <a href="#">
+        <a onClick={goToMaintenance}>
           <span className="material-symbols-outlined">
             notifications_active
           </span>
           <h3>Notificaciones</h3>
-          <span className="message-count">26</span>
+          <span className="message-count">0</span>
         </a>
 
-        <a href="#">
+        <a onClick={goToMaintenance}>
           <span className="material-symbols-outlined">menu_book</span>
           <h3>Tutorial</h3>
         </a>
 
-        <a href="#">
+        <a onClick={goToMaintenance}>
           <span className="material-symbols-outlined">quiz</span>
           <h3>Preguntas Frecuentes</h3>
         </a>
 
-        <a href="#">
+        <a onClick={goToMaintenance}>
           <span className="material-symbols-outlined">help_center</span>
           <h3>Centro de Ayuda</h3>
         </a>
 
-        <a href="#">
+        <a onClick={goToMaintenance}>
           <span className="material-symbols-outlined">privacy_tip</span>
           <h3>Políticas de Uso</h3>
         </a>
 
-        <a href="#">
+        <a onClick={goToMaintenance}>
           <span className="material-symbols-outlined">shield_person</span>
           <h3>Políticas de Privacidad</h3>
         </a>

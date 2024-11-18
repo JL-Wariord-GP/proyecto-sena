@@ -5,6 +5,7 @@ import Profile from "./components/Profile"; // Importa el componente de perfil
 import Error404 from "./page/Error404";
 import Error403 from "./page/Error403";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import Maintenance from "./components/Maintenance";
 
 function App() {
   return (
@@ -23,6 +24,11 @@ function App() {
         <Route
           path="/profile"
           element={<ProtectedRoute element={<Profile />} />}
+        />
+        {/* Rutas en mantenimiento */}
+        <Route
+          path="/maintenance"
+          element={<ProtectedRoute element={<Maintenance />} />}
         />
 
         {/* Páginas de error */}

@@ -1,0 +1,48 @@
+:root {
+    --font-size-h1: 6vw;  
+    --font-size-p: 3vw;   
+    --font-size-h2: 4vw;  
+    --font-size-min: 16px; 
+    --font-size-max: 36px; 
+}
+
+.containerBox__maintenance {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    flex: 1;
+    padding: 2rem;
+}
+
+.h1__maintenance {
+    font-size: clamp(var(--font-size-min), var(--font-size-h1), var(--font-size-max));
+    margin-bottom: 1rem;
+}
+
+.p__maintenance {
+    font-size: clamp(var(--font-size-min), var(--font-size-p), var(--font-size-max));
+    margin-bottom: 2rem;
+}
+
+.h2__maintenance {
+    font-size: clamp(var(--font-size-min), var(--font-size-h2), var(--font-size-max));
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    :root {
+        --font-size-h1: 8vw;  
+        --font-size-p: 4vw;   
+        --font-size-h2: 5vw;  
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --font-size-h1: 10vw; 
+        --font-size-p: 5vw;   
+        --font-size-h2: 6vw;  
+    }
+}
