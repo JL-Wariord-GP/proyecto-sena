@@ -18,7 +18,7 @@ function Right() {
             <p>
               Hey, <b>{firstName}</b>
             </p>
-            <small className="text-muted">Admin</small>
+            <small className="text-muted">Paciente</small>
           </div>
         </div>
       </div>

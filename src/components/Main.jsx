@@ -7,6 +7,8 @@ import "material-symbols";
 function Main() {
   const { firstName } = useAuth();
 
+ // console.log("First name in Main component:", firstName);
+
   return (
     <main>
       <h1>

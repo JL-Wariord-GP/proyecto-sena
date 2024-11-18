@@ -3,10 +3,10 @@
 function SalesAnalytics() {
   return (
     <div className="sales-analytics">
-      <h2>Mis Productos</h2>
+      <h2>Mis Gestiones</h2>
       <div className="item online">
         <div className="icon">
-          <span className="material-icons-sharp">shopping_cart</span>
+          <span className="material-icons-sharp">account_balance</span>
         </div>
 
         <div className="right">

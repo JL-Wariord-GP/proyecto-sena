@@ -1,14 +1,12 @@
+// src/services/authService.js
+
 import Swal from "sweetalert2";
-//const API_URL = "http://localhost:3000/api/auth";
-const API_URL = "https://server-db-project.onrender.com/api/auth";
+
+//const API_URL = "https://server-db-project.onrender.com/api/auth"; // Cambia esto por tu URL de API
+const API_URL = "http://localhost:3000/api/auth"; // Cambia esto por tu URL de API
 
 // Función auxiliar para manejar todas las solicitudes al servidor
-export const makeRequest = async (
-  endpoint,
-  method,
-  body = null,
-  token = null
-) => {
+const makeRequest = async (endpoint, method, body = null, token = null) => {
   try {
     const headers = { "Content-Type": "application/json" };
 
@@ -17,21 +15,16 @@ export const makeRequest = async (
     }
 
     const response = await fetch(`${API_URL}${endpoint}`, {
-      method: method,
-      headers: headers,
+      method,
+      headers,
       body: body ? JSON.stringify(body) : null,
     });
 
     const data = await response.json();
+    console.log("Response data:", data);
 
     if (!response.ok) {
       const errorMessage = data.error || "Ocurrió un error inesperado";
-      Swal.fire({
-        title: "Error",
-        text: errorMessage,
-        icon: "error",
-        confirmButtonText: "OK",
-      });
       throw new Error(errorMessage);
     }
 
@@ -45,6 +38,11 @@ export const makeRequest = async (
     });
     throw error;
   }
+};
+
+// Función para obtener detalles del usuario
+export const fetchUserDetails = async (token) => {
+  return await makeRequest("/users", "GET", null, token);
 };
 
 // Función para iniciar sesión

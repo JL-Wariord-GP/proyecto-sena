@@ -30,9 +30,11 @@ const useAuthLogic = () => {
         password: signInPassword,
       });
 
-      if (response && response.token) {
+      if (response && response.token && response.user) {
         localStorage.setItem("authToken", response.token);
-        await login(response.token);
+        // Pasamos tanto el token como el username a la función login
+        await login(response.token, response.user.username); 
+
         Swal.fire({
           title: "Inicio de sesión exitoso!",
           icon: "success",
@@ -41,7 +43,7 @@ const useAuthLogic = () => {
           navigate("/main");
         });
       } else {
-        throw new Error("No se recibió un token en la respuesta.");
+        throw new Error("No se recibió un token o usuario en la respuesta.");
       }
     } catch (error) {
       Swal.fire({
